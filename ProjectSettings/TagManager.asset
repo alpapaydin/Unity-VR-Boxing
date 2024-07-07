@@ -5,11 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - TargetObject
+  - PlayerFist
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Enemy
   - Water
   - UI
   - 
