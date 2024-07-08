@@ -6,48 +6,36 @@ public class PunchTarget : MonoBehaviour
 {
     public int hitDamage = 1;
     public EnemyAI enemy;
-    public DampedTransform targetConstraint;
+    public ChainIKConstraint targetConstraint;
     [SerializeField] private Transform targetBone; // Bone to attach the target to
     [SerializeField] private float launchDistance = 1.0f; // Distance to launch along the hit normal
     [SerializeField] private float launchSpeed = 10.0f; // Speed of launching
     [SerializeField] private float recoveryTime = 1.0f; // Time to recover to initial position
-    [SerializeField] private float recoverySpeed = 10.0f; // Speed of target recovery
+    [SerializeField] private float recoverySpeed = 2.0f; // Speed of target recovery
 
-    private Vector3 initialPosition;
     private bool isPunched; // Flag to track if target is currently punched
     private float punchTime; // Time when the target was punched
 
-    void Start()
-    {
-        isPunched = false;
-        UpdatePositionToBone();
-        initialPosition = transform.position;
-    }
-
     void FixedUpdate()
     {
-        // Smoothly recover target to initial position if not punched
+        // Smoothly recover target to targetBone's position if not punched
         if (!isPunched)
         {
-            transform.position = Vector3.Lerp(transform.position, initialPosition, recoverySpeed * Time.deltaTime);
+            transform.position = Vector3.Lerp(transform.position, targetBone.position, recoverySpeed * Time.deltaTime);
         }
         else if (Time.time >= punchTime + recoveryTime)
         {
-            // Teleport to initial position after recoveryTime seconds
-            transform.position = initialPosition;
+            // Smoothly move back to the targetBone's position after recoveryTime seconds
             isPunched = false;
-            targetConstraint.weight = 0f;
+            StartCoroutine(SmoothReturn());
         }
-    }
 
-    public void UpdatePositionToBone()
-    {
-        if (targetBone != null)
+        // Periodically set position to targetBone's position if idle
+        if (!isPunched && Vector3.Distance(transform.position, targetBone.position) < 0.01f)
         {
             transform.position = targetBone.position;
         }
     }
-
 
     void OnCollisionEnter(Collision collision)
     {
@@ -83,5 +71,18 @@ public class PunchTarget : MonoBehaviour
 
         // Ensure the target is exactly at the launch end position
         transform.position = launchEndPosition;
+    }
+
+    IEnumerator SmoothReturn()
+    {
+        targetConstraint.weight = 0f;
+        while (Vector3.Distance(transform.position, targetBone.position) > 0.01f)
+        {
+            transform.position = Vector3.Lerp(transform.position, targetBone.position, recoverySpeed * Time.deltaTime);
+            yield return null;
+        }
+
+        // Ensure the target is exactly at the targetBone's position
+        transform.position = targetBone.position;
     }
 }

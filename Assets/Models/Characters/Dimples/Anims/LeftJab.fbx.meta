@@ -57,10 +57,24 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0
-        functionName: NewEvent
-        data: 
-        objectReferenceParameter: {instanceID: 0}
+      - time: 0.41966426
+        functionName: punchOut
+        data: left
+        objectReferenceParameter: {fileID: 11500000, guid: 9b538030c6ba4c240bef54cadb2c3a93, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.5443645
+        functionName: punchHit
+        data: left
+        objectReferenceParameter: {fileID: 11500000, guid: 9b538030c6ba4c240bef54cadb2c3a93, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.8465228
+        functionName: animEnd
+        data: left
+        objectReferenceParameter: {fileID: 11500000, guid: 9b538030c6ba4c240bef54cadb2c3a93, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0

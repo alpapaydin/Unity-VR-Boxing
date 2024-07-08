@@ -6,6 +6,10 @@ TagManager:
   tags:
   - TargetObject
   - PlayerFist
+  - BoxingRing
+  - Ground
+  - Walls
+  - EnemyFist
   layers:
   - Default
   - TransparentFX
@@ -13,7 +17,7 @@ TagManager:
   - Enemy
   - Water
   - UI
-  - 
+  - Player
   - 
   - 
   - 
