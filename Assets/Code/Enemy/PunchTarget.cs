@@ -1,9 +1,11 @@
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using System.Collections;
+using System.Security.Cryptography;
 
 public class PunchTarget : MonoBehaviour
 {
+    public string targetPart = "head";
     public int hitDamage = 1;
     public EnemyAI enemy;
     public ChainIKConstraint targetConstraint;
@@ -45,13 +47,13 @@ public class PunchTarget : MonoBehaviour
             Vector3 launchDirection = collision.contacts[0].normal;
 
             // Launch the target along the normal direction
-            StartCoroutine(LaunchAndRecover(launchDirection));
+            StartCoroutine(LaunchAndRecover(launchDirection, collision.contacts[0].point));
         }
     }
 
-    IEnumerator LaunchAndRecover(Vector3 launchDirection)
+    IEnumerator LaunchAndRecover(Vector3 launchDirection, Vector3 hitLocation)
     {
-        enemy.getDamage(hitDamage);
+        enemy.getDamage(hitDamage, hitLocation, targetPart);
         isPunched = true;
         targetConstraint.weight = 1f;
         punchTime = Time.time;

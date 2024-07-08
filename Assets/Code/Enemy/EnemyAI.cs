@@ -20,11 +20,14 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private float attackDelayMax; // Maximum delay between attacks (seconds)
     [SerializeField] private float guardChance; // Chance (0-1) of entering guard after an attack
     public GameObject ragdollPrefab; // Assign your ragdoll prefab in the Inspector
+    public GameObject[] hitParticles;
 
     private enum PunchLockMode { off, inc, dec, }
     private PunchLockMode LeftMode = PunchLockMode.off;
     private PunchLockMode RightMode = PunchLockMode.off;
     private bool isDead = false;
+    private bool isHit = false;
+    private bool isGuarding = false;
     private bool isAttacking; // Flag to track if enemy is currently attacking
     private float nextAttackTime; // Time of the next attack
 
@@ -37,15 +40,11 @@ public class EnemyAI : MonoBehaviour
 
     private void Update()
     {
-        if (isDead)
+        if (isDead || isHit || isGuarding || isAttacking)
             { return; }
-        if (Time.time >= nextAttackTime && !isAttacking)
+        if (Time.time >= nextAttackTime)
         {
             Attack();
-        }
-        else if (isAttacking && IsInIdleState())
-        {
-            OnAttackEnd();
         }
     }
 
@@ -112,7 +111,7 @@ public class EnemyAI : MonoBehaviour
         }
         else
         {
-            animator.SetTrigger("LeftJab");
+            animator.SetTrigger("RightHook");
         }
 
         nextAttackTime = Time.time + Range(attackDelayMin, attackDelayMax);
@@ -146,7 +145,15 @@ public class EnemyAI : MonoBehaviour
     }
     public void animEnd()
     {
-        //leftHandChain.weight = 0f;
+        animator.SetTrigger("attackEnd");
+        OnAttackEnd();
+    }
+
+    public void recoveredHit()
+    {
+        isHit = false;
+        animator.SetInteger("hit", 0);
+        OnAttackEnd();
     }
 
     private bool IsInIdleState()
@@ -155,13 +162,38 @@ public class EnemyAI : MonoBehaviour
         return stateInfo.IsName("Idle");
     }
 
-    public void getDamage(int damage)
+    public void getDamage(int damage, Vector3 hitLocation, String targetPart)
     {
-        if (isDead)
+        if (isDead | isHit)
         {
             return;
         }
+        isHit = true;
+        isAttacking = false;
+        RightMode = PunchLockMode.off;
+        LeftMode = PunchLockMode.off;
+        leftHandChain.weight = 0;
+        rightHandChain.weight = 0;
+        headAim.weight = 0;
         hitPoints -= damage;
+        int randomIndex = Range(0, hitParticles.Length);
+        Instantiate(hitParticles[randomIndex], hitLocation, new Quaternion(0,0,0,0));
+        switch (targetPart)
+        {
+            case ("head"):
+                {
+                    //head hit anim
+                    animator.SetInteger("hit", 1);
+                    break;
+                }
+            case ("body"):
+                {
+                    //body hit
+                    animator.SetInteger("hit", 2);
+                    break;
+                }
+        }
+        animator.SetTrigger("enemyHit");
         if (hitPoints <= 0)
         {
             ReplaceWithRagdoll();
@@ -171,17 +203,10 @@ public class EnemyAI : MonoBehaviour
 
     public void ReplaceWithRagdoll()
     {
-        // Save the character's current position and rotation
         Vector3 currentPosition = transform.position;
         Quaternion currentRotation = transform.rotation;
-
-        // Instantiate the ragdoll at the character's position and rotation
         GameObject ragdoll = Instantiate(ragdollPrefab, currentPosition, currentRotation);
-
-        // Optionally, you can also copy the transform hierarchy to the ragdoll if needed
         CopyTransformsRecursively(transform, ragdoll.transform);
-
-        // Destroy the original character
         Destroy(gameObject);
     }
 
@@ -189,8 +214,6 @@ public class EnemyAI : MonoBehaviour
     {
         destination.position = source.position;
         destination.rotation = source.rotation;
-
-        // Ensure we only copy up to the child count that exists in both source and destination
         int childCount = Mathf.Min(source.childCount, destination.childCount);
         for (int i = 0; i < childCount; i++)
         {
@@ -203,17 +226,14 @@ public class EnemyAI : MonoBehaviour
 
     public void OnAttackEnd() // Called at the end of attack animation
     {
+        isAttacking = false;
         // Chance to enter guard after attack
         if (value < guardChance)
         {
             animator.SetBool("IsGuarding", true);
-        }
-        else
-        {
-            isAttacking = false;
+            isGuarding = true;
         }
 
-        // Exit guard after a short duration
         StartCoroutine(ExitGuardAfterDelay());
     }
 
@@ -221,29 +241,21 @@ public class EnemyAI : MonoBehaviour
     {
         while (true)
         {
-            // Check if the target is assigned
             if (target != null)
             {
-                // Calculate the direction to the target
                 Vector3 direction = target.position - transform.position;
-                direction.y = 0; // Keep the character upright (ignore y axis)
-
-                // Calculate the rotation needed to look at the target
                 Quaternion targetRotation = Quaternion.LookRotation(direction);
-
-                // Rotate towards the target rotation
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
             }
-
-            // Wait for the next frame
             yield return null;
         }
     }
 
     private IEnumerator ExitGuardAfterDelay()
     {
-        yield return new WaitForSeconds(1.0f); // Adjust delay as needed
+        yield return new WaitForSeconds(1.0f);
         animator.SetBool("IsGuarding", false);
         isAttacking = false;
+        isGuarding = false;
     }
 }

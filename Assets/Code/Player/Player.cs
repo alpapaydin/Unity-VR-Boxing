@@ -9,6 +9,8 @@ public class Player : MonoBehaviour
     public int damage = 1;
     public Transform leftEyeAnchor;
     public Transform rightEyeAnchor;
+    public Transform leftHandGlove;
+    public Transform rightHandGlove;
 
     private bool recentlyDamaged = false;
     private bool isDead = false;
@@ -18,10 +20,22 @@ public class Player : MonoBehaviour
         
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        bool areHandsConnected = OVRPlugin.GetHandTrackingEnabled();
+        if (areHandsConnected)
+        {
+            Debug.Log("Hands Connected: " + areHandsConnected);
+            leftHandGlove.localRotation = new Quaternion(0.5f, 0.5f, 0.5f, 0.5f);
+            rightHandGlove.localRotation = new Quaternion(-0.5f, -0.5f, 0.5f, 0.5f);
+        }
+        else
+        {
+            Debug.Log("Hands Connected: " + areHandsConnected);
+            Quaternion targetRotation = Quaternion.Euler(0, 0, 0);
+            leftHandGlove.localRotation = targetRotation;
+            rightHandGlove.localRotation = targetRotation;
+        }
     }
 
     void OnCollisionEnter(Collision collision)

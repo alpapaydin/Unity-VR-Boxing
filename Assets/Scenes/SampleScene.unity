@@ -1163,6 +1163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d3812de6bbbd7a4c82cbbb209e3e260, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPart: body
   hitDamage: 1
   enemy: {fileID: 1507159831}
   targetConstraint: {fileID: 1477104107}
@@ -1954,7 +1955,7 @@ MonoBehaviour:
     m_SourceObjects:
       m_Length: 1
       m_Item0:
-        transform: {fileID: 1749076111}
+        transform: {fileID: 2139814657}
         weight: 1
       m_Item1:
         transform: {fileID: 0}
@@ -3167,7 +3168,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c7f0106764ee15349a4c9565526c0077, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.18
+      value: -0.962
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: c7f0106764ee15349a4c9565526c0077, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5198,15 +5199,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4367775360115489869, guid: 560cfe580dfe421448d0db36a1a85384, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.226
+      value: 1.185
       objectReference: {fileID: 0}
     - target: {fileID: 4367775360115489869, guid: 560cfe580dfe421448d0db36a1a85384, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.387
+      value: 1.511
       objectReference: {fileID: 0}
     - target: {fileID: 4367775360115489869, guid: 560cfe580dfe421448d0db36a1a85384, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.075
+      value: 0.194
       objectReference: {fileID: 0}
     - target: {fileID: 4367775360115489869, guid: 560cfe580dfe421448d0db36a1a85384, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5242,7 +5243,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8619610344272144663, guid: 560cfe580dfe421448d0db36a1a85384, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.103
+      value: 0.043
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6473,6 +6474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d3812de6bbbd7a4c82cbbb209e3e260, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetPart: head
   hitDamage: 1
   enemy: {fileID: 1507159831}
   targetConstraint: {fileID: 1681205182}
@@ -9336,15 +9338,20 @@ MonoBehaviour:
   headAim: {fileID: 318885195}
   leftHandChain: {fileID: 1573248390}
   rightHandChain: {fileID: 468041909}
-  targetPlayer: {fileID: 1749076111}
-  hitPoints: 3
+  targetPlayer: {fileID: 2139814657}
+  hitPoints: 30
   PunchSpeed: 5
   rotationSpeed: 5
   animator: {fileID: 1507159829}
   attackDelayMin: 1
-  attackDelayMax: 2
+  attackDelayMax: 4
   guardChance: 0.5
   ragdollPrefab: {fileID: 6984567758139064729, guid: ab8656c5d27620d4eab66e8b65b6df39, type: 3}
+  hitParticles:
+  - {fileID: 7226583673155636401, guid: a2ab56839e1c9504ea9d141e95d0b16b, type: 3}
+  - {fileID: 5024009746357069194, guid: ec3f674830402cc45bce805cf6493db7, type: 3}
+  - {fileID: 2955623459812423943, guid: f5507a8c6a22c404ab324980c4e8a11b, type: 3}
+  - {fileID: 8443315704496310910, guid: 6ef35fa36e3a65043b2d800600204bdd, type: 3}
 --- !u!114 &1507159832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10564,7 +10571,7 @@ Transform:
   m_GameObject: {fileID: 1707257625}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.99531895, z: -0, w: -0.096644536}
-  m_LocalPosition: {x: -0.218, y: 0.34, z: 0.424}
+  m_LocalPosition: {x: -0.029, y: 0.34, z: 0.461}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10587,6 +10594,8 @@ MonoBehaviour:
   damage: 1
   leftEyeAnchor: {fileID: 116202066}
   rightEyeAnchor: {fileID: 1094260324}
+  leftHandGlove: {fileID: 361929439}
+  rightHandGlove: {fileID: 497606420}
 --- !u!1 &1708503456
 GameObject:
   m_ObjectHideFlags: 0
@@ -10848,11 +10857,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1109219650}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1749076111 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4367775360115489869, guid: 560cfe580dfe421448d0db36a1a85384, type: 3}
-  m_PrefabInstance: {fileID: 778930375}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1751323902
 GameObject:
   m_ObjectHideFlags: 0
