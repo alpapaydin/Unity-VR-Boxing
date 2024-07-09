@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using static UnityEngine.Random;
@@ -21,6 +22,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private float guardChance; // Chance (0-1) of entering guard after an attack
     public GameObject ragdollPrefab; // Assign your ragdoll prefab in the Inspector
     public GameObject[] hitParticles;
+    public string attackDirection = "";
 
     private enum PunchLockMode { off, inc, dec, }
     private PunchLockMode LeftMode = PunchLockMode.off;
@@ -119,6 +121,7 @@ public class EnemyAI : MonoBehaviour
 
     public void punchOut(String direction)
     {
+        attackDirection = direction;
         headAim.weight = 1;
         if (direction == "left")
         {
@@ -244,12 +247,20 @@ public class EnemyAI : MonoBehaviour
             if (target != null)
             {
                 Vector3 direction = target.position - transform.position;
+                direction.y = 0; // Ignore y-axis to ensure only horizontal rotation
+
                 Quaternion targetRotation = Quaternion.LookRotation(direction);
+                Vector3 targetEulerAngles = targetRotation.eulerAngles;
+                targetEulerAngles.x = 0; // Ensure no rotation on x-axis
+                targetEulerAngles.z = 0; // Ensure no rotation on z-axis
+
+                targetRotation = Quaternion.Euler(targetEulerAngles);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
             }
             yield return null;
         }
     }
+
 
     private IEnumerator ExitGuardAfterDelay()
     {
