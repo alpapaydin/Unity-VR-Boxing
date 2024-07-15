@@ -14,8 +14,6 @@ public class PlayerFist : MonoBehaviour
         if (collider.tag == "EnemyFist")
         {
             player.attackBlocked();
-            Debug.Log("attack blocked");
-            Debug.Log(enemy.attackDirection);
         }
     }
 }

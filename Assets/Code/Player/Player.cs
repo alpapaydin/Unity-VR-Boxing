@@ -26,13 +26,11 @@ public class Player : MonoBehaviour
         bool areHandsConnected = OVRPlugin.GetHandTrackingEnabled();
         if (areHandsConnected)
         {
-            Debug.Log("Hands Connected: " + areHandsConnected);
             leftHandGlove.localRotation = new Quaternion(0.5f, 0.5f, 0.5f, 0.5f);
             rightHandGlove.localRotation = new Quaternion(-0.5f, -0.5f, 0.5f, 0.5f);
         }
         else
         {
-            Debug.Log("Hands Connected: " + areHandsConnected);
             Quaternion targetRotation = Quaternion.Euler(0, 0, 0);
             leftHandGlove.localRotation = targetRotation;
             rightHandGlove.localRotation = targetRotation;
@@ -54,8 +52,7 @@ public class Player : MonoBehaviour
     {
         if (collision.tag == "EnemyFist" && !recentlyDamaged && !enemyBlocked)
         {
-            getDamage(1);
-            Debug.Log("PLAYERhit");
+            getDamage(1); 
             recentlyDamaged = true;
             StartCoroutine(ResetDamageCooldown());
         }
