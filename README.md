@@ -2,6 +2,11 @@
 
 This is a VR Punching Game Demo made in Unity, tested on Meta Quest. It can be played with both hands and a controller.
 
+
+https://github.com/user-attachments/assets/d3f354ca-cc52-478d-99e8-9a3ec87b2f35
+
+(Editor play demo with a slow wifi connection.)
+
 ## Features
 
 - **Simple Enemy with Procedural Animations:** 
