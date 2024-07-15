@@ -173,6 +173,7 @@ public class EnemyAI : MonoBehaviour
         }
         isHit = true;
         isAttacking = false;
+        isGuarding = false;
         RightMode = PunchLockMode.off;
         LeftMode = PunchLockMode.off;
         leftHandChain.weight = 0;
@@ -227,7 +228,7 @@ public class EnemyAI : MonoBehaviour
     }
 
 
-    public void OnAttackEnd() // Called at the end of attack animation
+    public void OnAttackEnd()
     {
         isAttacking = false;
         // Chance to enter guard after attack
@@ -251,8 +252,8 @@ public class EnemyAI : MonoBehaviour
 
                 Quaternion targetRotation = Quaternion.LookRotation(direction);
                 Vector3 targetEulerAngles = targetRotation.eulerAngles;
-                targetEulerAngles.x = 0; // Ensure no rotation on x-axis
-                targetEulerAngles.z = 0; // Ensure no rotation on z-axis
+                targetEulerAngles.x = 0;
+                targetEulerAngles.z = 0;
 
                 targetRotation = Quaternion.Euler(targetEulerAngles);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
